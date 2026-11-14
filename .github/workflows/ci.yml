@@ -29,6 +29,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: pipx install --include-deps ansible && pipx inject --include-apps ansible ansible-lint
       - run: ansible-lint site.yml
+      # The CI machine has never started its SSH server, so sshd's runtime directory doesn't exist yet.
+      - run: sudo mkdir -p /run/sshd
       # Apply the baseline to the CI machine itself, then check a second run changes nothing.
       - run: ansible-playbook -i localhost, -c local site.yml
       - run: ansible-playbook -i localhost, -c local site.yml | tee second-run.log
