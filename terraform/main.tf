@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Vince Bono
-resource "proxmox_virtual_environment_download_file" "image" {
+resource "proxmox_download_file" "image" {
   content_type = "import"
   datastore_id = var.image_datastore
   node_name    = var.node_name
@@ -30,7 +30,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
 
   disk {
     datastore_id = var.datastore
-    import_from  = proxmox_virtual_environment_download_file.image.id
+    import_from  = proxmox_download_file.image.id
     interface    = "scsi0"
     size         = each.value.disk_gb
   }
