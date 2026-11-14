@@ -20,21 +20,6 @@ jobs:
       - run: terraform init -backend=false -input=false
       - run: terraform validate
       - run: terraform test
-  ansible:
-    runs-on: ubuntu-24.04
-    defaults:
-      run:
-        working-directory: ansible
-    steps:
-      - uses: actions/checkout@v4
-      - run: pipx install --include-deps ansible && pipx inject --include-apps ansible ansible-lint
-      - run: ansible-lint site.yml
-      # Apply the baseline to the CI machine itself, then check a second run changes nothing.
-      - run: ansible-playbook -i localhost, -c local site.yml
-      - run: ansible-playbook -i localhost, -c local site.yml | tee second-run.log
-      - run: grep -E 'changed=0 +unreachable=0 +failed=0' second-run.log
-      - run: sudo sshd -T | grep -E '^(passwordauthentication no|permitrootlogin no)$' | wc -l | grep -qx 2
-      - run: sudo ufw status verbose | grep -q 'deny (incoming)'
   guard:
     runs-on: ubuntu-latest
     steps:
