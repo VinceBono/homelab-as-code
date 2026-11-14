@@ -1,0 +1,8 @@
+# Copy to terraform.tfvars (which git ignores) and edit.
+gateway        = "192.168.10.1"
+ssh_public_key = "ssh-ed25519 AAAA... you@workstation"
+
+vms = {
+  web1 = { ipv4 = "192.168.10.21/24", groups = ["docker"] }
+  db1  = { ipv4 = "192.168.10.22/24", cores = 4, memory_mb = 8192, disk_gb = 80 }
+}
